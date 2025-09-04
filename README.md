@@ -1,30 +1,52 @@
-# SaaS Landing Page
+## Downloads (Private GitHub Releases)
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+This app exposes secure API routes to list releases from a private GitHub repository and proxy asset downloads using a server-side token.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/falahhs-projects/v0-saa-s-landing-page)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/projects/nnLnANjYQyK)
+Environment variables required (configure in your hosting provider's project settings):
 
-## Overview
+- `GITHUB_OWNER` — GitHub org or username, e.g. `ternarystudioai-code`
+- `GITHUB_REPO` — Repository name, e.g. `dyad`
+- `GITHUB_TOKEN` — A Personal Access Token (classic) or fine-grained token with minimal scopes to read releases and download assets. Recommended scopes: `repo:read` (or fine-grained equivalent).
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+Routes:
 
-## Deployment
+- `GET /api/releases` — Returns `{ stable: Release[], beta: Release[] }` with assets mapped to a proxy `download_url`.
+- `GET /api/download?asset_id=123` — Streams the asset from GitHub to the client without exposing the token.
 
-Your project is live at:
+Page:
 
-**[https://vercel.com/falahhs-projects/v0-saa-s-landing-page](https://vercel.com/falahhs-projects/v0-saa-s-landing-page)**
+- `/downloads` — UI to browse Stable and Beta releases and download assets via the proxy.
 
-## Build your app
+Notes:
 
-Continue building your app on:
+- Do not expose `GITHUB_TOKEN` in client-rendered code. It must only be used in server-side API routes.
+- These endpoints are unauthenticated by default. You can add rate limiting or require a session if desired.
 
-**[https://v0.app/chat/projects/nnLnANjYQyK](https://v0.app/chat/projects/nnLnANjYQyK)**
+## Example environment configuration
 
-## How It Works
+Set these in your deployment provider (e.g., Vercel → Project → Settings → Environment Variables) or in a local `.env.local` when developing:
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+```
+GITHUB_OWNER=your-org-or-username
+GITHUB_REPO=your-private-repo
+GITHUB_TOKEN=ghp_xxx_or_fine_grained_token
+```
+
+The token must have read access to the repository's releases and assets. For fine-grained tokens, grant minimal repository read permissions to the target repo only.
+
+## Platform-aware instant downloads
+
+The homepage hero (`components/home/hero.tsx`) now:
+
+- Detects the user's OS/arch client-side via `lib/platform.ts`.
+- Fetches the latest stable release from `/api/releases`.
+- Presents an instant "Download for (platform)" button that links to the recommended asset through the secure proxy.
+- Provides a "View all downloads" button that navigates to `/downloads`.
+
+The Downloads page (`app/downloads/page.tsx`) also highlights a "Recommended" asset for the user's platform on the latest stable release.
+
+## Troubleshooting
+
+- If `/api/releases` returns 401/404, verify the three env vars are set and that the token has sufficient read permissions.
+- If downloads redirect to GitHub and fail with 404, the asset is private and the token lacks access; re-check token permissions or repo scope.
+- If platform detection doesn't appear, ensure the page is client-rendered (it is) and that no ad-blockers/scripts are blocking `navigator` APIs.
