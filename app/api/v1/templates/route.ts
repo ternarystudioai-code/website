@@ -1,4 +1,4 @@
-// /api/v1/templates must mirror Dyad's public API: returns ApiTemplate[]
+// /api/v1/templates must mirror Ternary's public API: returns ApiTemplate[]
 // ApiTemplate shape: { githubOrg, githubRepo, title, description, imageUrl }
 import { NextRequest, NextResponse } from 'next/server';
 import { localTemplatesData } from '@/data/templates';

@@ -34,9 +34,9 @@ export default function ReleasesPage() {
   return (
     <div className="container mx-auto max-w-5xl p-6 space-y-6">
       <div className="space-y-2">
-        <h1 className="text-2xl font-bold">Dyad Release Notes</h1>
+        <h1 className="text-2xl font-bold">Ternary Release Notes</h1>
         <p className="text-sm text-muted-foreground">
-          Enter a Dyad version to view its release notes. Example: <code>0.1.0</code>
+          Enter a Ternary version to view its release notes. Example: <code>0.1.0</code>
         </p>
         <div className="flex gap-2 items-center">
           <Input

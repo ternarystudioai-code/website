@@ -1,9 +1,9 @@
-// Proxy Dyad's update API to Electron Public Update Service
-// This clones the behavior of https://api.dyad.sh/v1/update/* by forwarding
-// requests to https://update.electronjs.org/dyad-sh/dyad/*.
+// Proxy Ternary's update API to Electron Public Update Service
+// This clones the behavior of https://api.ternary.sh/v1/update/* by forwarding
+// requests to https://update.electronjs.org/ternary-sh/ternary/*.
 // Example:
-//   /api/v1/update/stable/win32/1.0.0 -> https://update.electronjs.org/dyad-sh/dyad/stable/win32/1.0.0
-//   /api/v1/update/beta/darwin/1.0.0  -> https://update.electronjs.org/dyad-sh/dyad/beta/darwin/1.0.0
+//   /api/v1/update/stable/win32/1.0.0 -> https://update.electronjs.org/ternary-sh/ternary/stable/win32/1.0.0
+//   /api/v1/update/beta/darwin/1.0.0  -> https://update.electronjs.org/ternary-sh/ternary/beta/darwin/1.0.0
 
 import { NextRequest } from 'next/server';
 

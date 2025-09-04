@@ -43,7 +43,7 @@ export function DocsNav() {
           <div className="w-6 h-6 bg-purple-600 rounded-md flex items-center justify-center">
             <span className="text-white text-sm font-bold">D</span>
           </div>
-          Dyad
+          Ternary
         </Link>
       </div>
 

@@ -12,7 +12,7 @@ export default function Release0190Beta1() {
           Beta release with experimental features
         </p>
         <p className="text-sm text-gray-500">
-          Dyad v0.19.0 Beta 1 includes experimental features and improvements for testing.
+          Ternary v0.19.0 Beta 1 includes experimental features and improvements for testing.
         </p>
       </div>
 

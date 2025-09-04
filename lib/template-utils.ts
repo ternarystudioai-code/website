@@ -1,5 +1,5 @@
 // Template utilities for local backend (no external requests)
-// Mirrors dyad local data from dyad/src/shared/templates.ts
+// Mirrors ternary local data from ternary/src/shared/templates.ts
 
 import type { Template as LocalTemplate } from "@/data/templates";
 import { localTemplatesData } from "@/data/templates";
@@ -33,7 +33,7 @@ function fromLocal(t: LocalTemplate): Template {
 
 export async function fetchApiTemplates(): Promise<Template[]> {
   if (templatesCache) return templatesCache;
-  // Map dyad local data directly; no network calls
+  // Map ternary local data directly; no network calls
   templatesCache = localTemplatesData.map(fromLocal);
   return templatesCache;
 }

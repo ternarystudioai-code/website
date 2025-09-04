@@ -3,7 +3,7 @@ export default function DebuggingGuide() {
     <article className="prose dark:prose-invert">
       <h1>Debugging Tips</h1>
       <p>
-        This guide shares practical tips to debug issues quickly when working with your app and the Dyad runtime.
+        This guide shares practical tips to debug issues quickly when working with your app and the Ternary runtime.
       </p>
       <h2>General Advice</h2>
       <ul>

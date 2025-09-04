@@ -5,7 +5,7 @@ This app exposes secure API routes to list releases from a private GitHub reposi
 Environment variables required (configure in your hosting provider's project settings):
 
 - `GITHUB_OWNER` — GitHub org or username, e.g. `ternarystudioai-code`
-- `GITHUB_REPO` — Repository name, e.g. `dyad`
+- `GITHUB_REPO` — Repository name, e.g. `ternary`
 - `GITHUB_TOKEN` — A Personal Access Token (classic) or fine-grained token with minimal scopes to read releases and download assets. Recommended scopes: `repo:read` (or fine-grained equivalent).
 
 Routes:
