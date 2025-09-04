@@ -11,8 +11,8 @@ import { NextRequest } from 'next/server';
 // Set in your hosting environment (e.g., Vercel Project Settings):
 //   UPDATE_GH_OWNER=your-gh-org-or-user
 //   UPDATE_GH_REPO=your-electron-app-repo
-const OWNER = process.env.UPDATE_GH_OWNER || 'dyad-sh';
-const REPO = process.env.UPDATE_GH_REPO || 'dyad';
+const OWNER = process.env.UPDATE_GH_OWNER || 'TernaryStudio';
+const REPO = process.env.UPDATE_GH_REPO || 'Ternary-App';
 const UPSTREAM_BASE = `https://update.electronjs.org/${OWNER}/${REPO}`;
 
 async function proxy(req: NextRequest, slugParts: string[]) {

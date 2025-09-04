@@ -16,6 +16,8 @@ interface Release {
 export function DocsNav() {
   const pathname = usePathname();
   const [releasesOpen, setReleasesOpen] = useState(pathname.startsWith("/docs/releases"));
+  const [guidesOpen, setGuidesOpen] = useState(pathname.startsWith("/docs/guides"));
+  const [upgradesOpen, setUpgradesOpen] = useState(pathname.startsWith("/docs/upgrades"));
   const [releases, setReleases] = useState<Release[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -96,6 +98,93 @@ export function DocsNav() {
               )}
             </div>
           )}
+        </div>
+
+        {/* Guides Section */}
+        <div>
+          <button
+            onClick={() => setGuidesOpen(!guidesOpen)}
+            className={cn(
+              "flex items-center justify-between w-full px-2 py-1 text-sm font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800",
+              pathname.startsWith("/docs/guides") && "bg-gray-100 dark:bg-gray-800"
+            )}
+          >
+            <span>Guides</span>
+            {guidesOpen ? (
+              <ChevronDown className="w-4 h-4" />
+            ) : (
+              <ChevronRight className="w-4 h-4" />
+            )}
+          </button>
+          {guidesOpen && (
+            <div className="ml-4 mt-1 space-y-1">
+              {[
+                { href: "/docs/guides/debugging", label: "Debugging" },
+                { href: "/docs/guides/ai-rules", label: "AI Rules" },
+                { href: "/docs/guides/mobile-app", label: "Mobile App" },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "block px-2 py-1 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800",
+                    pathname === item.href && "bg-gray-200 dark:bg-gray-700 font-medium"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Upgrades Section */}
+        <div>
+          <button
+            onClick={() => setUpgradesOpen(!upgradesOpen)}
+            className={cn(
+              "flex items-center justify-between w-full px-2 py-1 text-sm font-medium rounded-md hover:bg-gray-100 dark:hover:bg-gray-800",
+              pathname.startsWith("/docs/upgrades") && "bg-gray-100 dark:bg-gray-800"
+            )}
+          >
+            <span>Upgrades</span>
+            {upgradesOpen ? (
+              <ChevronDown className="w-4 h-4" />
+            ) : (
+              <ChevronRight className="w-4 h-4" />
+            )}
+          </button>
+          {upgradesOpen && (
+            <div className="ml-4 mt-1 space-y-1">
+              {[
+                { href: "/docs/upgrades/select-component", label: "Select Component" },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "block px-2 py-1 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800",
+                    pathname === item.href && "bg-gray-200 dark:bg-gray-700 font-medium"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Standalone Links */}
+        <div className="mt-2">
+          <Link
+            href="/docs/roadmap"
+            className={cn(
+              "block px-2 py-1 text-sm rounded-md hover:bg-gray-100 dark:hover:bg-gray-800",
+              pathname === "/docs/roadmap" && "bg-gray-200 dark:bg-gray-700 font-medium"
+            )}
+          >
+            Roadmap
+          </Link>
         </div>
       </div>
     </nav>

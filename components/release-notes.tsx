@@ -86,7 +86,7 @@ export function ReleaseNotes({ version }: ReleaseNotesProps) {
       <div className="p-4 space-y-2">
         <div className="text-lg font-semibold">No release notes found</div>
         <div className="text-sm text-muted-foreground">
-          We couldn't find release notes for version <code>v{version}</code> on dyad.sh.
+          We couldn't find release notes for version <code>v{version}</code> on Ternary Studio.
         </div>
       </div>
     );
