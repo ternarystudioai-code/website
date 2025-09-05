@@ -77,18 +77,6 @@ export function StickyFooter() {
               <ul className="space-y-2">
                 <li className="transition-colors" style={{ color: "#121113" }}>
                   <a
-                    href="https://www.reddit.com/r/TernaryDeveloper/"
-                    className="hover:underline cursor-pointer"
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
-                    style={{ color: "inherit" }}
-                    rel="noopener"
-                  >
-                    Reddit
-                  </a>
-                </li>
-                <li className="transition-colors" style={{ color: "#121113" }}>
-                  <a
                     href="https://x.com/TernaryStudio"
                     className="hover:underline cursor-pointer"
                     onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
@@ -101,7 +89,7 @@ export function StickyFooter() {
                 </li>
                 <li className="transition-colors" style={{ color: "#121113" }}>
                   <a
-                    href="#"
+                    href="https://discord.gg/RxvdWgXb"
                     className="hover:underline cursor-pointer"
                     onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
                     onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
