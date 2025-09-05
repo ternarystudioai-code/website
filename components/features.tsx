@@ -56,7 +56,7 @@ export default function Features() {
             geist.className,
           )}
         >
-          Features
+          What you get with Ternary
         </h2>
         <FollowerPointerCard
           title={
@@ -85,11 +85,9 @@ export default function Features() {
                 style={{ transition: "all 0s ease-in-out" }}
               >
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-2xl leading-none font-semibold tracking-tight">CLI & Manual Support</h3>
+                  <h3 className="text-2xl leading-none font-semibold tracking-tight">Supabase Integration</h3>
                   <div className="text-md text-muted-foreground flex flex-col gap-2 text-sm">
-                    <p className="max-w-[460px]">
-                      Integrate your landing page directly in the product while using your favorite tools.
-                    </p>
+                    <p className="max-w-[460px]">First‑class Auth, Postgres, Row‑Level Security, Realtime, and Storage.</p>
                   </div>
                 </div>
                 <div className="pointer-events-none flex grow items-center justify-center select-none relative">
@@ -99,11 +97,13 @@ export default function Features() {
                   >
                     {/* Background Image */}
                     <div className="absolute inset-0">
-                      <img
-                        src="https://framerusercontent.com/images/UjqUIiBHmIcSH9vos9HlG2BF4bo.png"
-                        alt="Arrow-CoreExchange"
-                        className="w-full h-full object-cover rounded-xl"
-                      />
+                      <div className="w-full h-full flex items-center justify-center bg-black/20 rounded-xl">
+                        <img
+                          src="https://seeklogo.com/images/S/supabase-logo-DCC676FFE2-seeklogo.com.png"
+                          alt="Supabase"
+                          className="h-28 opacity-90"
+                        />
+                      </div>
                     </div>
 
                     {/* Animated SVG Connecting Lines */}
@@ -162,7 +162,7 @@ export default function Features() {
                       <div className="flex items-center gap-8">
                         {/* Left Column */}
                         <div className="flex flex-col gap-3">
-                          {["Feature-1", "Feature-1", "Feature-1"].map((item, index) => (
+                          {["Auth", "Postgres", "RLS"].map((item, index) => (
                             <motion.div
                               key={`left-${index}`}
                               className="bg-white rounded px-3 py-2 flex items-center gap-2 text-black text-sm font-medium shadow-sm"
@@ -175,9 +175,9 @@ export default function Features() {
                               whileHover={{ scale: 1.05 }}
                             >
                               <div className="w-4 h-4 flex items-center justify-center">
-                                {index === 0 && <span className="text-xs">📄</span>}
-                                {index === 1 && <span className="text-xs">💰</span>}
-                                {index === 2 && <span className="text-xs">🏢</span>}
+                                {index === 0 && <span className="text-xs">🔐</span>}
+                                {index === 1 && <span className="text-xs">🗃️</span>}
+                                {index === 2 && <span className="text-xs">🪪</span>}
                               </div>
                               {item}
                             </motion.div>
@@ -192,16 +192,12 @@ export default function Features() {
                           transition={{ duration: 0.6, ease: "easeOut" }}
                           whileHover={{ scale: 1.1, rotate: 5 }}
                         >
-                          <img
-                            src="https://framerusercontent.com/images/q43ivjLz67lXhWf6TKfLIh0FY.png"
-                            alt="Logo"
-                            className="w-full h-full object-cover"
-                          />
+                          <img src="/logo_transparent.png" alt="Ternary" className="w-full h-full object-cover" />
                         </motion.div>
 
                         {/* Right Column */}
                         <div className="flex flex-col gap-3">
-                          {["Feature-1", "Feature-1", "Feature-1"].map((item, index) => (
+                          {["Realtime", "Storage", "Edge Functions"].map((item, index) => (
                             <motion.div
                               key={`right-${index}`}
                               className="bg-white rounded px-3 py-2 flex items-center gap-2 text-black text-sm font-medium shadow-sm"
@@ -214,9 +210,9 @@ export default function Features() {
                               whileHover={{ scale: 1.05 }}
                             >
                               <div className="w-4 h-4 flex items-center justify-center">
-                                {index === 0 && <span className="text-xs">👥</span>}
-                                {index === 1 && <span className="text-xs">💳</span>}
-                                {index === 2 && <span className="text-xs">👨‍⚕️</span>}
+                                {index === 0 && <span className="text-xs">⚡</span>}
+                                {index === 1 && <span className="text-xs">🗂️</span>}
+                                {index === 2 && <span className="text-xs">🧭</span>}
                               </div>
                               {item}
                             </motion.div>
@@ -273,19 +269,16 @@ export default function Features() {
                 style={{ transition: "all 0s ease-in-out" }}
               >
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-2xl leading-none font-semibold tracking-tight">Globally Usable</h3>
+                  <h3 className="text-2xl leading-none font-semibold tracking-tight">Local‑first</h3>
                   <div className="text-md text-muted-foreground flex flex-col gap-2 text-sm">
-                    <p className="max-w-[460px]">
-                      Blocks are available everywhere but ours are the best. Use them in your favorite framework or even
-                      in plain HTML.
-                    </p>
+                    <p className="max-w-[460px]">Keep your data on your machine. Works offline. No vendor lock‑in.</p>
                   </div>
                 </div>
                 <div className="flex min-h-[300px] grow items-start justify-center select-none">
                   <h1 className="mt-8 text-center text-5xl leading-[100%] font-semibold sm:leading-normal lg:mt-12 lg:text-6xl">
                     <span className='bg-background relative mt-3 inline-block w-fit rounded-md border px-1.5 py-0.5 before:absolute before:top-0 before:left-0 before:z-10 before:h-full before:w-full before:bg-[url("/noise.gif")] before:opacity-[0.09] before:content-[""]'>
                       <ScrambleHover
-                        text="feature-2"
+                        text="local‑first"
                         scrambleSpeed={70}
                         maxIterations={20}
                         useOriginalCharsOnly={false}
@@ -330,11 +323,9 @@ export default function Features() {
                 style={{ transition: "all 0s ease-in-out" }}
               >
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-2xl leading-none font-semibold tracking-tight">Smart Components</h3>
+                  <h3 className="text-2xl leading-none font-semibold tracking-tight">19+ Models</h3>
                   <div className="text-md text-muted-foreground flex flex-col gap-2 text-sm">
-                    <p className="max-w-[460px]">
-                      Intelligent components that adapt to your needs with built-in animations and interactions.
-                    </p>
+                    <p className="max-w-[460px]">OpenAI, Anthropic, Google, Mistral, Ollama, and more. Bring your own key.</p>
                   </div>
                 </div>
                 <div className="flex grow items-center justify-center select-none relative min-h-[300px] p-4">
@@ -343,7 +334,7 @@ export default function Features() {
                       <div className="p-4">
                         <textarea
                           className="w-full min-h-[100px] bg-transparent border-none text-white placeholder:text-white/50 resize-none focus:outline-none text-base leading-relaxed"
-                          placeholder="Search the web..."
+                          placeholder="Ask any model…"
                           value={inputValue}
                           onChange={(e) => setInputValue(e.target.value)}
                           onKeyDown={handleKeyDown}
@@ -383,7 +374,7 @@ export default function Features() {
                               <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
                               <path d="M2 12h20"></path>
                             </svg>
-                            Search
+                            Generate
                           </button>
                         </div>
                         <button className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
@@ -426,11 +417,9 @@ export default function Features() {
                 style={{ transition: "all 0s ease-in-out" }}
               >
                 <div className="flex flex-col gap-4">
-                  <h3 className="text-2xl leading-none font-semibold tracking-tight">Dynamic Layouts</h3>
+                  <h3 className="text-2xl leading-none font-semibold tracking-tight">Full‑stack & Instant Deploy</h3>
                   <div className="text-md text-muted-foreground flex flex-col gap-2 text-sm">
-                    <p className="max-w-[460px]">
-                      Responsive layouts that transform and adapt seamlessly across all device sizes.
-                    </p>
+                    <p className="max-w-[460px]">Next.js app + API routes, hooks, and templates. One‑click deploy to Vercel/Netlify.</p>
                   </div>
                 </div>
                 <div className="flex grow items-center justify-center select-none relative min-h-[300px] p-4">

@@ -2,57 +2,57 @@ import { Marquee } from "@/components/magicui/marquee"
 
 const testimonials = [
   {
-    name: "Arjun Mehta",
-    username: "@arjdev",
-    body: "v0 has completely changed the way I build UIs. Generate, copy-paste, done. No more design stress.",
+    name: "react & tailwind developer",
+    username: "@GabrielChriste",
+    body: "Ternary seems like a really useful tool for speeding up development! I'm curious how well the AI handles complex codebases or edge cases when scaffolding features. The one‑click release and built‑in tracking are nice touches—could make shipping apps much smoother for small teams.",
+    img: "https://ph-avatars.imgix.net/8829831/e04a508e-4ea1-4c78-8140-9b0a580bb505.jpeg?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=120&h=120&fit=crop&frame=1&dpr=2",
+  },
+  {
+    name: "Indie Developer",
+    username: "@buildsfast",
+    body: "Local‑first by default. I can prototype offline and sync later. Zero vendor lock‑in.",
     img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "Sara Lin",
-    username: "@sara.codes",
-    body: "Honestly shocked at how smooth the v0 generated components are out of the box. Just works perfectly.",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&h=150&fit=crop&crop=face",
-  },
-  {
-    name: "Devon Carter",
-    username: "@devninja",
-    body: "Our team launched a client site in 2 days using v0 components. Saved so much development time.",
+    name: "Full‑stack Founder",
+    username: "@shipdaily",
+    body: "Supabase auth + Postgres + RLS + realtime just works. Scaffolded a full app in one afternoon.",
     img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "Priya Shah",
-    username: "@priyacodes",
-    body: "Generated a few components in v0 and everything blended perfectly with our codebase. Massive W.",
+    name: "AI Engineer",
+    username: "@promptsmith",
+    body: "Being able to switch between OpenAI, Anthropic, and local models seamlessly is huge for evals.",
     img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "Leo Martin",
-    username: "@leobuilds",
-    body: "Found a beautiful hero section in v0, tweaked the prompt, and shipped in 15 minutes. Game changer.",
+    name: "Design‑to‑Code",
+    username: "@ux2dev",
+    body: "The templates plus docs made it easy to go from idea to a polished app with instant deploy.",
     img: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "Chloe Winters",
-    username: "@chloewinters",
-    body: "v0 helped us prototype multiple landing pages without writing CSS once. Pure magic.",
+    name: "Data Apps Team",
+    username: "@dataops",
+    body: "Ternary's rules and tools wiring made our agents reliable. The built‑in testing loop is fantastic.",
     img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "Ayaan Malik",
-    username: "@ayaan_dev",
-    body: "As a solo founder, v0 lets me move fast without sacrificing design quality. Essential tool.",
+    name: "Mobile Dev",
+    username: "@capacitor",
+    body: "Shipped an MVP with the mobile template and API routes. One click to preview on device.",
     img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "Monica Reeves",
-    username: "@monicareeves",
-    body: "Can't believe how polished the v0 generated components look. Clients are impressed every time.",
+    name: "Agency Lead",
+    username: "@clientfirst",
+    body: "For client work, the instant deploy and environment wiring cut days from our timelines.",
     img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop&crop=face",
   },
   {
-    name: "James Roy",
-    username: "@jamesrdev",
-    body: "v0 is a lifesaver when deadlines are tight. Generate a component, tweak, and deploy instantly.",
+    name: "Platform Engineer",
+    username: "@infra",
+    body: "Great DX. Typed hooks, clear errors, and the downloads page detected my OS correctly.",
     img: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=150&h=150&fit=crop&crop=face",
   },
 ]
@@ -105,11 +105,11 @@ export function TestimonialsSection() {
             </button>
           </div>
           <h2 className="from-foreground/60 via-foreground to-foreground/60 dark:from-muted-foreground/55 dark:via-foreground dark:to-muted-foreground/55 mt-5 bg-gradient-to-r bg-clip-text text-center text-4xl font-semibold tracking-tighter text-transparent md:text-[54px] md:leading-[60px] __className_bb4e88 relative z-10">
-            What our users say
+            Why teams choose Ternary
           </h2>
 
           <p className="mt-5 relative z-10 text-center text-lg text-zinc-500">
-            From intuitive design to powerful features, our app has become an essential tool for users around the world.
+            Real feedback from builders using Ternary to ship AI apps faster across web, desktop, and mobile.
           </p>
         </div>
 

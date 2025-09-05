@@ -9,7 +9,6 @@ import { NewReleasePromo } from "@/components/new-release-promo"
 import { FAQSection } from "@/components/faq-section"
 import { PricingSection } from "@/components/pricing-section"
 import { StickyFooter } from "@/components/sticky-footer"
-import { TemplatesDisplay } from "@/components/templates-display"
 import Image from "next/image"
 
 export default function Home() {
@@ -82,8 +81,8 @@ export default function Home() {
 
       {/* Desktop Header */}
       <header
-        className={`sticky top-4 z-[9999] mx-auto hidden w-full flex-row items-center justify-between self-start rounded-full bg-background/80 md:flex backdrop-blur-sm border border-border/50 shadow-lg transition-all duration-300 ${
-          isScrolled ? "max-w-3xl px-2" : "max-w-5xl px-4"
+        className={`sticky top-4 z-[9999] mx-auto hidden w-7xl flex-row items-center justify-between self-start rounded-full bg-background/80 md:flex backdrop-blur-sm border border-border/50 shadow-lg transition-all duration-500 ease-in-out ${
+          isScrolled ? "max-w-5xl px-4" : "max-w-none mx-4 px-6"
         } py-2`}
         style={{
           willChange: "transform",
@@ -323,11 +322,6 @@ export default function Home() {
       {/* Features Section */}
       <div id="features">
         <Features />
-      </div>
-
-      {/* Templates Section */}
-      <div id="templates" className="py-12">
-        <TemplatesDisplay className="max-w-6xl mx-auto px-4" />
       </div>
 
       {/* Pricing Section */}

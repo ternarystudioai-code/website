@@ -1,6 +1,7 @@
 "use client"
 import { motion, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
+import Image from "next/image"
 
 export function StickyFooter() {
   const [isAtBottom, setIsAtBottom] = useState(false)
@@ -50,67 +51,83 @@ export function StickyFooter() {
               transition={{ duration: 0.6, delay: 0.1 }}
             >
               <ul className="space-y-2">
-                <li
-                  className="hover:underline cursor-pointer transition-colors"
-                  style={{ color: "#121113" }}
-                  onMouseEnter={(e) => (e.target.style.color = "rgba(18, 17, 19, 0.8)")}
-                  onMouseLeave={(e) => (e.target.style.color = "#121113")}
-                >
-                  Home
+                <li className="transition-colors" style={{ color: "#121113" }}>
+                  <a
+                    href="/"
+                    className="hover:underline cursor-pointer"
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
+                    style={{ color: "inherit" }}
+                  >
+                    Home
+                  </a>
                 </li>
-                <li
-                  className="hover:underline cursor-pointer transition-colors"
-                  style={{ color: "#121113" }}
-                  onMouseEnter={(e) => (e.target.style.color = "rgba(18, 17, 19, 0.8)")}
-                  onMouseLeave={(e) => (e.target.style.color = "#121113")}
-                >
-                  Docs
-                </li>
-                <li
-                  className="hover:underline cursor-pointer transition-colors"
-                  style={{ color: "#121113" }}
-                  onMouseEnter={(e) => (e.target.style.color = "rgba(18, 17, 19, 0.8)")}
-                  onMouseLeave={(e) => (e.target.style.color = "#121113")}
-                >
-                  Components
+                <li className="transition-colors" style={{ color: "#121113" }}>
+                  <a
+                    href="/docs"
+                    className="hover:underline cursor-pointer"
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
+                    style={{ color: "inherit" }}
+                  >
+                    Docs
+                  </a>
                 </li>
               </ul>
               <ul className="space-y-2">
-                <li
-                  className="hover:underline cursor-pointer transition-colors"
-                  style={{ color: "#121113" }}
-                  onMouseEnter={(e) => (e.target.style.color = "rgba(18, 17, 19, 0.8)")}
-                  onMouseLeave={(e) => (e.target.style.color = "#121113")}
-                >
-                  Github
+                <li className="transition-colors" style={{ color: "#121113" }}>
+                  <a
+                    href="https://www.reddit.com/r/TernaryDeveloper/"
+                    className="hover:underline cursor-pointer"
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
+                    style={{ color: "inherit" }}
+                    rel="noopener"
+                  >
+                    Reddit
+                  </a>
                 </li>
-                <li
-                  className="hover:underline cursor-pointer transition-colors"
-                  style={{ color: "#121113" }}
-                  onMouseEnter={(e) => (e.target.style.color = "rgba(18, 17, 19, 0.8)")}
-                  onMouseLeave={(e) => (e.target.style.color = "#121113")}
-                >
-                  Twitter
+                <li className="transition-colors" style={{ color: "#121113" }}>
+                  <a
+                    href="https://x.com/TernaryStudio"
+                    className="hover:underline cursor-pointer"
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
+                    style={{ color: "inherit" }}
+                    rel="noopener"
+                  >
+                    Twitter
+                  </a>
                 </li>
-                <li
-                  className="hover:underline cursor-pointer transition-colors"
-                  style={{ color: "#121113" }}
-                  onMouseEnter={(e) => (e.target.style.color = "rgba(18, 17, 19, 0.8)")}
-                  onMouseLeave={(e) => (e.target.style.color = "#121113")}
-                >
-                  Discord
+                <li className="transition-colors" style={{ color: "#121113" }}>
+                  <a
+                    href="#"
+                    className="hover:underline cursor-pointer"
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "rgba(18, 17, 19, 0.8)")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = "#121113")}
+                    style={{ color: "inherit" }}
+                    rel="noopener"
+                  >
+                    Discord
+                  </a>
                 </li>
               </ul>
             </motion.div>
-            <motion.h2
-              className="absolute bottom-0 left-0 translate-y-1/3 sm:text-[192px] text-[80px] font-bold select-none"
-              style={{ color: "#121113" }}
+            <motion.div
+              className="absolute bottom-0 left-0 translate-y-1/3 select-none"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
-              v0
-            </motion.h2>
+              <Image
+                src="/logo_transparent.png"
+                alt="Ternary logo"
+                width={400}
+                height={400}
+                priority
+                className="opacity-90"
+              />
+            </motion.div>
           </div>
         </motion.div>
       )}

@@ -7,12 +7,12 @@ export default function Release0190Beta1() {
     <div className="space-y-8">
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-bold">0.19.0 Beta 1</h1>
+        <h1 className="text-3xl font-bold">1.0.0-stable.1</h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
           Beta release with experimental features
         </p>
         <p className="text-sm text-gray-500">
-          Ternary v0.19.0 Beta 1 includes experimental features and improvements for testing.
+          Ternary v1.0.0-stable.1 includes experimental features and improvements for testing.
         </p>
       </div>
 
@@ -23,7 +23,7 @@ export default function Release0190Beta1() {
             <iframe
               src="https://app.supademo.com/embed/cmeajwv4z00cxxn0ietpahdoe?embed_v=2&utm_source=embed"
               loading="lazy"
-              title="Ternary 1.2.0-beta Feature Demo"
+              title="Ternary 1.0.0-stable.1 Feature Demo"
               allow="clipboard-write"
               className="absolute inset-0 w-full h-full"
               frameBorder={0}
