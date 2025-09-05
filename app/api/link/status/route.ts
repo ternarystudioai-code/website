@@ -3,12 +3,23 @@ import { getSupabaseAdmin } from "@/lib/supabase-server"
 
 export const runtime = "nodejs"
 
+function withCORS(res: NextResponse) {
+  res.headers.set("Access-Control-Allow-Origin", "*")
+  res.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+  res.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+  return res
+}
+
+export async function OPTIONS() {
+  return withCORS(new NextResponse(null, { status: 204 }))
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}))
     const { polling_token } = body || {}
     if (!polling_token) {
-      return NextResponse.json({ error: "Missing polling_token" }, { status: 400 })
+      return withCORS(NextResponse.json({ error: "Missing polling_token" }, { status: 400 }))
     }
 
     const supa = getSupabaseAdmin()
@@ -19,11 +30,11 @@ export async function POST(req: Request) {
       .maybeSingle()
 
     if (error || !link) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 })
+      return withCORS(NextResponse.json({ error: "Not found" }, { status: 404 }))
     }
 
     if (link.status !== "confirmed") {
-      return NextResponse.json({ status: link.status })
+      return withCORS(NextResponse.json({ status: link.status }))
     }
 
     // When confirmed, return the temp token and clear it so it can't be fetched twice
@@ -48,8 +59,8 @@ export async function POST(req: Request) {
       .update({ token_temp: null })
       .eq("polling_token", polling_token)
 
-    return NextResponse.json({ status: "confirmed", token, device_id })
+    return withCORS(NextResponse.json({ status: "confirmed", token, device_id }))
   } catch (e: any) {
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return withCORS(NextResponse.json({ error: "Internal Server Error" }, { status: 500 }))
   }
 }

@@ -5,7 +5,18 @@ import { generateRawToken, hashToken } from "@/lib/app-tokens"
 export const runtime = "nodejs"
 
 function bad(msg: string, status = 400) {
-  return NextResponse.json({ error: msg }, { status })
+  return withCORS(NextResponse.json({ error: msg }, { status }))
+}
+
+function withCORS(res: NextResponse) {
+  res.headers.set("Access-Control-Allow-Origin", "*")
+  res.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+  res.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+  return res
+}
+
+export async function OPTIONS() {
+  return withCORS(new NextResponse(null, { status: 204 }))
 }
 
 export async function POST(req: NextRequest) {
@@ -59,9 +70,9 @@ export async function POST(req: NextRequest) {
       .eq("code", code)
     if (updErr) return bad(`Confirm failed: ${updErr.message}`, 500)
 
-    return NextResponse.json({ ok: true })
+    return withCORS(NextResponse.json({ ok: true }))
   } catch (err: any) {
     console.error("/api/link/confirm error", err)
-    return bad("Internal Server Error", 500)
+    return withCORS(NextResponse.json({ error: "Internal Server Error" }, { status: 500 }))
   }
 }

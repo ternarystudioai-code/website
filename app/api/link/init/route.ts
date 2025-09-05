@@ -4,6 +4,17 @@ import { generateShortCode, generatePollingToken } from "@/lib/linking"
 
 export const runtime = "nodejs"
 
+function withCORS(res: NextResponse) {
+  res.headers.set("Access-Control-Allow-Origin", "*")
+  res.headers.set("Access-Control-Allow-Headers", "Authorization, Content-Type")
+  res.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS")
+  return res
+}
+
+export async function OPTIONS() {
+  return withCORS(new NextResponse(null, { status: 204 }))
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => ({}))
@@ -22,15 +33,15 @@ export async function POST(req: Request) {
       expires_at,
     })
     if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return withCORS(NextResponse.json({ error: error.message }, { status: 500 }))
     }
 
     const base = process.env.NEXT_PUBLIC_WEBSITE_BASE || process.env.VERCEL_URL || "http://ternary-pre-domain.vercel.app"
     const origin = base.startsWith("http") ? base : (base ? `https://${base}` : "")
     const verify_url = `${origin}/link/verify?code=${encodeURIComponent(code)}`
 
-    return NextResponse.json({ code, polling_token, verify_url, expires_at })
+    return withCORS(NextResponse.json({ code, polling_token, verify_url, expires_at }))
   } catch (e: any) {
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
+    return withCORS(NextResponse.json({ error: "Internal Server Error" }, { status: 500 }))
   }
 }
