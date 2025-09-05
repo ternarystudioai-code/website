@@ -1,5 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
+import { getSupabaseBrowser } from "@/lib/supabase-browser"
+import { useRouter } from "next/navigation"
 import Hero from "@/components/home/hero"
 import Features from "@/components/features"
 import { TestimonialsSection } from "@/components/testimonials"
@@ -8,10 +10,13 @@ import { FAQSection } from "@/components/faq-section"
 import { PricingSection } from "@/components/pricing-section"
 import { StickyFooter } from "@/components/sticky-footer"
 import { TemplatesDisplay } from "@/components/templates-display"
+import Image from "next/image"
 
 export default function Home() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     const root = window.document.documentElement
@@ -27,6 +32,26 @@ export default function Home() {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  useEffect(() => {
+    // Check Supabase session on mount
+    const supabase = getSupabaseBrowser()
+    supabase.auth.getSession().then(({ data }) => {
+      setIsLoggedIn(!!data.session)
+    })
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsLoggedIn(!!session)
+    })
+    return () => {
+      sub.subscription.unsubscribe()
+    }
+  }, [])
+
+  const handleSignOut = async () => {
+    const supabase = getSupabaseBrowser()
+    await supabase.auth.signOut()
+    router.refresh()
+  }
 
   const handleMobileNavClick = (elementId: string) => {
     setIsMobileMenuOpen(false)
@@ -71,20 +96,16 @@ export default function Home() {
           className={`z-50 flex items-center justify-center gap-2 transition-all duration-300 ${
             isScrolled ? "ml-4" : ""
           }`}
-          href="https://v0.app"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/"
         >
-          <svg
-            fill="currentColor"
-            viewBox="0 0 147 70"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            className="text-foreground rounded-full size-8 w-8"
-          >
-            <path d="M56 50.2031V14H70V60.1562C70 65.5928 65.5928 70 60.1562 70C57.5605 70 54.9982 68.9992 53.1562 67.1573L0 14H19.7969L56 50.2031Z"></path>
-            <path d="M147 56H133V23.9531L100.953 56H133V70H96.6875C85.8144 70 77 61.1856 77 50.3125V14H91V46.1562L123.156 14H91V0H127.312C138.186 0 147 8.81439 147 19.6875V56Z"></path>
-          </svg>
+          <Image
+            src="/logo_transparent.png"
+            alt="Ternary logo"
+            width={32}
+            height={32}
+            className="rounded-full"
+            priority
+          />
         </a>
 
         <div className="absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-muted-foreground transition duration-200 hover:text-foreground md:flex md:space-x-2">
@@ -173,19 +194,37 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-4">
-          <a
-            href="/login"
-            className="font-medium transition-colors hover:text-foreground text-muted-foreground text-sm cursor-pointer"
-          >
-            Log In
-          </a>
-
-          <a
-            href="/signup"
-            className="rounded-md font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center bg-gradient-to-b from-primary to-primary/80 text-primary-foreground shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] px-4 py-2 text-sm"
-          >
-            Sign Up
-          </a>
+          {isLoggedIn ? (
+            <>
+              <a
+                href="/dashboard"
+                className="rounded-md font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center bg-gradient-to-b from-primary to-primary/80 text-primary-foreground shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] px-4 py-2 text-sm"
+              >
+                Dashboard
+              </a>
+              <button
+                onClick={handleSignOut}
+                className="font-medium transition-colors hover:text-foreground text-muted-foreground text-sm"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <a
+                href="/login"
+                className="font-medium transition-colors hover:text-foreground text-muted-foreground text-sm cursor-pointer"
+              >
+                Log In
+              </a>
+              <a
+                href="/signup"
+                className="rounded-md font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center bg-gradient-to-b from-primary to-primary/80 text-primary-foreground shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] px-4 py-2 text-sm"
+              >
+                Sign Up
+              </a>
+            </>
+          )}
         </div>
       </header>
 
@@ -193,20 +232,16 @@ export default function Home() {
       <header className="sticky top-4 z-[9999] mx-4 flex w-auto flex-row items-center justify-between rounded-full bg-background/80 backdrop-blur-sm border border-border/50 shadow-lg md:hidden px-4 py-3">
         <a
           className="flex items-center justify-center gap-2"
-          href="https://v0.app"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/"
         >
-          <svg
-            fill="currentColor"
-            viewBox="0 0 147 70"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            className="text-foreground rounded-full size-7 w-7"
-          >
-            <path d="M56 50.2031V14H70V60.1562C70 65.5928 65.5928 70 60.1562 70C57.5605 70 54.9982 68.9992 53.1562 67.1573L0 14H19.7969L56 50.2031Z"></path>
-            <path d="M147 56H133V23.9531L100.953 56H133V70H96.6875C85.8144 70 77 61.1856 77 50.3125V14H91V46.1562L123.156 14H91V0H127.312C138.186 0 147 8.81439 147 19.6875V56Z"></path>
-          </svg>
+          <Image
+            src="/logo_transparent.png"
+            alt="Ternary logo"
+            width={28}
+            height={28}
+            className="rounded-full"
+            priority
+          />
         </a>
 
         <button

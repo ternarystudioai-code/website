@@ -8,6 +8,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { getSupabaseBrowser } from "@/lib/supabase-browser"
+import { useRouter } from "next/navigation"
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -17,6 +19,7 @@ export default function SignupPage() {
     confirmPassword: "",
   })
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -28,14 +31,36 @@ export default function SignupPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.password !== formData.confirmPassword) {
-      console.log("[v0] Password mismatch")
+      alert("Passwords do not match")
       return
     }
     setIsLoading(true)
-    // Simulate signup process
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsLoading(false)
-    console.log("[v0] Signup attempt:", formData)
+    try {
+      const supabase = getSupabaseBrowser()
+      const origin = typeof window !== "undefined" ? window.location.origin : undefined
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: { name: formData.name },
+          emailRedirectTo: origin,
+        },
+      })
+      if (error) {
+        alert(error.message)
+        return
+      }
+      if (!data.session) {
+        alert("Check your email to confirm your account")
+        return
+      }
+      router.push("/")
+    } catch (err) {
+      console.error("Signup error", err)
+      alert("Failed to sign up. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -213,6 +238,18 @@ export default function SignupPage() {
             <Button
               variant="outline"
               className="bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-all duration-200 group"
+              onClick={async () => {
+                try {
+                  const supabase = getSupabaseBrowser()
+                  const origin = typeof window !== "undefined" ? window.location.origin : undefined
+                  await supabase.auth.signInWithOAuth({
+                    provider: "google",
+                    options: { redirectTo: origin },
+                  })
+                } catch (e) {
+                  console.error(e)
+                }
+              }}
             >
               <svg
                 className="w-5 h-5 mr-2 text-zinc-300 group-hover:text-black transition-colors duration-200"

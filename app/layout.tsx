@@ -6,9 +6,10 @@ import "./globals.css"
 import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: "Ternary",
+  description: "Create your own app with ease",
+  generator: "TernaryStudio",
+  icons: { icon: "/logo.ico" },
 }
 
 export default function RootLayout({

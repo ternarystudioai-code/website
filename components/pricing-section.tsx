@@ -3,6 +3,8 @@
 import { motion } from "framer-motion"
 import { Check, Sparkles } from "lucide-react"
 import { useState } from "react"
+import { startSnapCheckout } from "@/lib/midtrans"
+import { getSupabaseBrowser } from "@/lib/supabase-browser"
 
 const pricingPlans = [
   {
@@ -168,6 +170,46 @@ export function PricingSection() {
                     ? "bg-gradient-to-r from-[#e78a53] to-[#e78a53]/80 text-white shadow-lg shadow-[#e78a53]/25 hover:shadow-[#e78a53]/40"
                     : "bg-white/10 text-white border border-white/20 hover:bg-white/20"
                 }`}
+                onClick={async () => {
+                  try {
+                    // Only initiate payment for paid plans
+                    if (plan.price === "Free") return
+                    const usdAmount = isAnnual ? (plan as any).annualPrice : (plan as any).monthlyPrice
+                    if (!usdAmount) return
+                    const idrAmount = Math.round(usdAmount * 16000)
+
+                    // Require auth: if not logged in, send to /login
+                    const supabase = getSupabaseBrowser()
+                    const { data: sessionData } = await supabase.auth.getSession()
+                    if (!sessionData.session) {
+                      window.location.href = "/login"
+                      return
+                    }
+                    const userId = sessionData.session.user.id
+                    await startSnapCheckout({
+                      amount: idrAmount,
+                      items: [
+                        {
+                          id: `plan-${plan.name.toLowerCase()}`,
+                          name: `${plan.name} ${isAnnual ? "Annual" : "Monthly"}`,
+                          price: idrAmount,
+                          quantity: 1,
+                        },
+                      ],
+                      metadata: {
+                        plan: plan.name,
+                        billing_cycle: isAnnual ? "annual" : "monthly",
+                        usd_price: usdAmount,
+                        rate: 16000,
+                        currency: "IDR",
+                        user_id: userId,
+                      },
+                    })
+                  } catch (e) {
+                    console.error(e)
+                    alert("Unable to start checkout. Please try again.")
+                  }
+                }}
               >
                 {plan.cta}
               </motion.button>

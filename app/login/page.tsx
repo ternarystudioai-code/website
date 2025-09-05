@@ -8,19 +8,32 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { getSupabaseBrowser } from "@/lib/supabase-browser"
+import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    // Simulate login process
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsLoading(false)
-    console.log("[v0] Login attempt:", { email, password })
+    try {
+      const supabase = getSupabaseBrowser()
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        alert(error.message)
+        return
+      }
+      router.push("/")
+    } catch (err: any) {
+      console.error("Login error", err)
+      alert("Failed to sign in. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -158,6 +171,17 @@ export default function LoginPage() {
             <Button
               variant="outline"
               className="bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-all duration-200 group"
+              onClick={async () => {
+                try {
+                  const supabase = getSupabaseBrowser()
+                  await supabase.auth.signInWithOAuth({
+                    provider: "google",
+                    options: { redirectTo: `${window.location.origin}` },
+                  })
+                } catch (e) {
+                  console.error(e)
+                }
+              }}
             >
               <svg
                 className="w-5 h-5 mr-2 text-zinc-300 group-hover:text-black transition-colors duration-200"
@@ -185,6 +209,17 @@ export default function LoginPage() {
             <Button
               variant="outline"
               className="bg-zinc-900/50 border-zinc-800 text-zinc-300 hover:bg-white hover:text-black hover:border-white transition-all duration-200 group"
+              onClick={async () => {
+                try {
+                  const supabase = getSupabaseBrowser()
+                  await supabase.auth.signInWithOAuth({
+                    provider: "github",
+                    options: { redirectTo: `${window.location.origin}` },
+                  })
+                } catch (e) {
+                  console.error(e)
+                }
+              }}
             >
               <svg
                 className="w-5 h-5 mr-2 text-zinc-300 group-hover:text-black transition-colors duration-200"
