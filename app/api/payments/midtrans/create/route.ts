@@ -114,7 +114,7 @@ export async function POST(req: Request) {
       const user_id = metadata?.user_id as string | undefined
       const plan = (metadata?.plan as string | undefined) || null
       const billing_cycle = (metadata?.billing_cycle as string | undefined) || null
-      await supa.from("orders").insert({
+      const { error: dbError } = await supa.from("orders").insert({
         order_id: finalOrderId,
         user_id,
         amount,
@@ -126,9 +126,17 @@ export async function POST(req: Request) {
         token: json.token,
         redirect_url: json.redirect_url,
       })
+      if (dbError) {
+        console.error("[orders.insert] error", {
+          message: dbError.message,
+          details: (dbError as any).details,
+          hint: (dbError as any).hint,
+          code: (dbError as any).code,
+        })
+      }
     } catch (e) {
       // swallow; do not block payment if DB not configured
-      console.warn("Supabase order insert failed", e)
+      console.warn("Supabase order insert failed (exception)", e)
     }
 
     return NextResponse.json({

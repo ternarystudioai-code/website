@@ -50,3 +50,5 @@ The Downloads page (`app/downloads/page.tsx`) also highlights a "Recommended" as
 - If `/api/releases` returns 401/404, verify the three env vars are set and that the token has sufficient read permissions.
 - If downloads redirect to GitHub and fail with 404, the asset is private and the token lacks access; re-check token permissions or repo scope.
 - If platform detection doesn't appear, ensure the page is client-rendered (it is) and that no ad-blockers/scripts are blocking `navigator` APIs.
+
+X73NloWNOZz2pZZZ
