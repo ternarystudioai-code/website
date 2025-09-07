@@ -83,6 +83,13 @@ export async function POST(req: Request) {
       payload.custom_field1 = JSON.stringify(metadata).slice(0, 128)
     }
 
+    // If a finish redirect URL is provided, pass it through to Snap callbacks
+    if (redirect_url) {
+      payload.callbacks = {
+        finish: redirect_url,
+      }
+    }
+
     const authHeader =
       "Basic " + Buffer.from(`${serverKey}:`).toString("base64")
 

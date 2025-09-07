@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import crypto from "crypto"
 import { getSupabaseAdmin } from "@/lib/supabase-server"
+import { generateLiteLLMKey, getBaseUrlFromHeaders } from "../_keygen"
 
 function sha512(data: string) {
   return crypto.createHash("sha512").update(data).digest("hex")
@@ -97,7 +98,53 @@ export async function POST(req: NextRequest) {
       console.warn("Supabase webhook update failed", e)
     }
 
-    return NextResponse.json({ ok: true, order_id, transaction_status, fraud_status, payment_type, transaction_time })
+    // Stripe parity: when payment succeeds, also generate API key and return deeplink/success URL
+    let apiKey: string | null = null
+    let redirectUrl: string | null = null
+    let successUrl: string | null = null
+
+    if (transaction_status === "settlement" || transaction_status === "capture") {
+      try {
+        // Fetch minimal order again to get plan/user_id
+        const supa2 = getSupabaseAdmin()
+        const { data: orderRows2 } = await supa2
+          .from("orders")
+          .select("user_id, plan")
+          .eq("order_id", order_id)
+          .limit(1)
+        const order2 = orderRows2?.[0]
+        const plan = (order2?.plan as string | undefined) || "pro"
+        const userId = (order2?.user_id as string | undefined) || "user"
+
+        apiKey = await generateLiteLLMKey({
+          plan,
+          emailOrUserId: userId,
+          key_alias: `midtrans-webhook-${order_id}`,
+        })
+
+        const host = req.headers.get("host") || "ternary.app"
+        const base = getBaseUrlFromHeaders(host)
+        const url = new URL("/success", base)
+        url.searchParams.set("apiKey", apiKey)
+        successUrl = url.toString()
+        redirectUrl = `ternary://ternary-pro-return?key=${apiKey}`
+      } catch (e) {
+        // Do not fail the webhook if keygen fails; just log
+        console.error("Keygen in midtrans webhook failed:", e)
+      }
+    }
+
+    return NextResponse.json({
+      ok: true,
+      order_id,
+      transaction_status,
+      fraud_status,
+      payment_type,
+      transaction_time,
+      ...(apiKey ? { apiKey } : {}),
+      ...(redirectUrl ? { redirectUrl } : {}),
+      ...(successUrl ? { successUrl } : {}),
+    })
   } catch (err: any) {
     return NextResponse.json(
       { error: "Unexpected server error", details: String(err?.message || err) },
