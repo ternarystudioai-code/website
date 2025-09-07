@@ -15,6 +15,16 @@ export async function generateLiteLLMKey({
   emailOrUserId: string;
   key_alias?: string;
 }) {
+  const normalizePlan = (p: string | undefined): "hobby" | "pro" | "team" => {
+    const v = (p || "").toString().trim().toLowerCase();
+    if (v === "hobby" || v === "free" || v === "starter" || v === "basic") return "hobby";
+    if (v === "pro" || v === "professional") return "pro";
+    if (v === "team" || v === "plus" || v === "business" || v === "enterprise") return "team";
+    // Default to pro if unknown to avoid webhook failure
+    return "pro";
+  };
+
+  const normPlan = normalizePlan(plan);
   const userId = (emailOrUserId || "user")
     .toString()
     .replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -25,27 +35,25 @@ export async function generateLiteLLMKey({
     key_alias: alias,
     models: [],
     max_budget: 0,
-    metadata: { userId, plan },
+    metadata: { userId, plan: normPlan },
     rpm_limit: 0,
     tpm_limit: 0,
     budget_duration: "30d",
     max_parallel_requests: 20,
   };
 
-  if (plan === "hobby") {
+  if (normPlan === "hobby") {
     payload.max_budget = 100;
     payload.rpm_limit = 60;
     payload.tpm_limit = 1000;
-  } else if (plan === "pro") {
+  } else if (normPlan === "pro") {
     payload.max_budget = 15;
     payload.rpm_limit = 30;
     payload.tpm_limit = 75000;
-  } else if (plan === "team") {
+  } else if (normPlan === "team") {
     payload.max_budget = 60;
     payload.rpm_limit = 75;
     payload.tpm_limit = 200000;
-  } else {
-    throw new Error("Invalid plan");
   }
 
   const resp = await fetch(
