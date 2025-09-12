@@ -96,7 +96,7 @@ export default function Hero() {
                 <a
                   href={suggestedAsset?.download_url || "/downloads"}
                   className="rounded-lg font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-flex items-center gap-2 bg-gradient-to-b from-primary to-primary/80 text-primary-foreground shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] px-7 py-4 text-base md:text-lg"
-                  aria-label="Download Dyad"
+                  aria-label="Download Ternary"
                 >
                   <Download className="h-5 w-5" />
                   {suggestedAsset ? `Download for ${os ?? "your platform"}` : "Download"}
@@ -104,7 +104,7 @@ export default function Hero() {
                 <a
                   href="/downloads"
                   className="px-7 py-4 rounded-lg border text-base md:text-lg hover:bg-(--background-lighter)"
-                  aria-label="View all Dyad downloads"
+                  aria-label="View all Ternary downloads"
                 >
                   View all downloads
                 </a>
