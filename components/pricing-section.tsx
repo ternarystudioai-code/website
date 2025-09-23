@@ -17,8 +17,8 @@ const pricingPlans = [
   },
   {
     name: "Pro",
-    monthlyPrice: 29,
-    annualPrice: 24,
+    monthlyPrice: 3,
+    annualPrice: 29,
     description: "For professionals building serious projects",
     features: [
       "Unlimited components",
@@ -33,7 +33,7 @@ const pricingPlans = [
   },
   {
     name: "Team",
-    monthlyPrice: 99,
+    monthlyPrice: 9,
     annualPrice: 79,
     description: "For teams collaborating on projects",
     features: [
