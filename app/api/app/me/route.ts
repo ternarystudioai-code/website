@@ -29,14 +29,22 @@ export async function GET(req: Request) {
       .eq("id", ctx.user_id)
       .maybeSingle()
 
-    const plan = profile?.plan ?? "free"
-    const status = profile?.status ?? "inactive"
+    const rawPlan = (profile?.plan ?? "free").toLowerCase()
+    const status = (profile?.status ?? "inactive")
     const current_period_end = profile?.current_period_end ?? null
+    const now = new Date()
+    const periodEnd = current_period_end ? new Date(current_period_end) : null
+    const isTrialPlan = rawPlan === "free-trial" || rawPlan === "trial" || status.toLowerCase().includes("trial")
+    const isTrialActive = !!(isTrialPlan && periodEnd && periodEnd > now)
 
-    // Feature flags derived from plan/status
-    const feature_flags = plan === "Pro" || plan === "pro"
+    const effectivePlan = isTrialActive ? "pro" : rawPlan
+
+    // Feature flags derived from effective plan/status (treat active trial as pro)
+    const feature_flags = effectivePlan === "pro"
       ? { pro: true, priority: "high", max_tokens: 1000000 }
-      : { pro: false, priority: "standard", max_tokens: 50000 }
+      : effectivePlan === "plus"
+        ? { pro: true, priority: "premium", max_tokens: 2000000 }
+        : { pro: false, priority: "standard", max_tokens: 50000 }
 
     // Fetch email from auth (service role)
     const { data: authUser } = await supa.auth.admin.getUserById(ctx.user_id)
@@ -46,7 +54,7 @@ export async function GET(req: Request) {
       user_id: ctx.user_id,
       device_id: ctx.device_id,
       email,
-      plan,
+      plan: effectivePlan,
       status,
       current_period_end,
       feature_flags,

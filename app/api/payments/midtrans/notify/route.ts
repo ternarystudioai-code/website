@@ -41,10 +41,27 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 403 })
     }
 
-    // Update order and profile in Supabase (best-effort)
+    // Update order and profile in Supabase (best-effort, idempotent)
     try {
       const supa = getSupabaseAdmin()
-      // Update or insert order status
+
+      // Fetch existing order
+      const { data: existingOrders } = await supa
+        .from("orders")
+        .select("order_id, user_id, plan, billing_cycle, status, paid_at")
+        .eq("order_id", order_id)
+        .limit(1)
+      const existing = existingOrders?.[0]
+
+      // If already settled, respond OK (idempotent)
+      if (
+        existing?.paid_at &&
+        (existing.status === "settlement" || existing.status === "capture")
+      ) {
+        return NextResponse.json({ ok: true, order_id, transaction_status })
+      }
+
+      // Update order status
       await supa
         .from("orders")
         .update({
@@ -62,33 +79,48 @@ export async function POST(req: NextRequest) {
         })
         .eq("order_id", order_id)
 
-      // Fetch the order to get user_id and plan info
-      const { data: orderRows } = await supa.from("orders").select("user_id, plan, billing_cycle").eq("order_id", order_id).limit(1)
-      const order = orderRows?.[0]
+      // If not a success state, stop after order update
+      const isSuccess = transaction_status === "settlement" || transaction_status === "capture"
+      if (!isSuccess) {
+        return NextResponse.json({ ok: true, order_id, transaction_status })
+      }
 
-      if (order?.user_id) {
-        // Determine new profile status and period end
-        let newStatus: string | null = null
-        if (transaction_status === "settlement" || transaction_status === "capture") newStatus = "active"
-        else if (transaction_status === "pending") newStatus = "pending"
-        else if (["deny", "expire", "cancel", "failure"].includes(String(transaction_status))) newStatus = "inactive"
+      // On success, compute new subscription end date
+      if (existing?.user_id) {
+        const userId = existing.user_id as string
+        // Read current profile
+        const { data: profile } = await supa
+          .from("profiles")
+          .select("plan, current_period_end")
+          .eq("id", userId)
+          .maybeSingle()
 
-        // Calculate period end based on billing_cycle
-        let current_period_end: string | null = null
-        if (newStatus === "active") {
-          const days = order.billing_cycle === "annual" ? 365 : 30
-          const end = new Date()
-          end.setDate(end.getDate() + days)
-          current_period_end = end.toISOString()
+        const now = new Date()
+        const cpe = profile?.current_period_end
+          ? new Date(profile.current_period_end)
+          : null
+        const active = !!(cpe && cpe > now)
+
+        let base = now
+        // For monthly stacking: extend from current_period_end if active
+        if (existing.billing_cycle === "monthly" && active && cpe) {
+          base = cpe
         }
+        // For annual, policy choice: set from now. If you want stacking annuals, uncomment:
+        // if (existing.billing_cycle === "annual" && active && cpe) base = cpe
+
+        const days = existing.billing_cycle === "annual" ? 365 : 30
+        const end = new Date(base)
+        end.setDate(end.getDate() + days)
+        const current_period_end = end.toISOString()
 
         await supa
           .from("profiles")
           .upsert(
             {
-              id: order.user_id,
-              plan: order.plan ?? null,
-              status: newStatus,
+              id: userId,
+              plan: existing.plan ?? null,
+              status: "active",
               current_period_end,
             },
             { onConflict: "id" }

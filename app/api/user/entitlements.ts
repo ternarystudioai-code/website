@@ -16,7 +16,7 @@ interface UserProfile {
 
 interface PlanInfo {
   tier: "free" | "pro" | "plus";
-  source: string;
+  source: string; // e.g., 'default' | 'trial' | 'midtrans' | 'stripe'
   current_period_end?: string;
 }
 
@@ -50,16 +50,29 @@ export default async function handler(
       return res.status(401).json({ error: "Unauthorized" });
     }
 
-    // Get user profile and plan info
-    const { data: profile, error: profileError } = await supabaseAdmin
+    // Get user profile and plan info (fields defined in Supabase migration)
+    const { data: profile } = await supabaseAdmin
       .from("profiles")
-      .select("*")
+      .select("id, email, name, plan, status, current_period_end")
       .eq("id", session.user.id)
       .single();
 
-    // Default to free plan if no profile or error
-    const planTier = profile?.plan_tier || "free";
-    const planSource = profile?.plan_source || "default";
+    // Determine trial status
+    const now = new Date();
+    const currentPeriodEnd = profile?.current_period_end
+      ? new Date(profile.current_period_end)
+      : undefined;
+    const isTrialPlan =
+      (profile?.plan || "free").toLowerCase() === "free-trial" ||
+      (profile?.plan || "free").toLowerCase() === "trial" ||
+      (profile?.status || "").toLowerCase().includes("trial");
+    const isTrialActive = isTrialPlan && currentPeriodEnd && currentPeriodEnd > now;
+
+    // Compute effective tier and source
+    const effectiveTier: "free" | "pro" | "plus" = isTrialActive
+      ? "pro"
+      : (profile?.plan === "pro" ? "pro" : profile?.plan === "plus" ? "plus" : "free");
+    const planSource = isTrialActive ? "trial" : "default";
 
     const response: EntitlementsResponse = {
       user: {
@@ -68,17 +81,17 @@ export default async function handler(
         name: session.user.user_metadata?.full_name || session.user.email!,
       },
       plan: {
-        tier: planTier,
+        tier: effectiveTier,
         source: planSource,
         current_period_end: profile?.current_period_end,
       },
       entitlements: {
-        // Basic entitlements based on plan
-        figma_import: planTier !== "free",
-        branded_model: planTier !== "free",
-        premium_templates: planTier !== "free",
-        workflow_runner: planTier === "plus",
-        team_features: planTier === "plus",
+        // Basic entitlements based on effective tier (trial treated as pro)
+        figma_import: effectiveTier !== "free",
+        branded_model: effectiveTier !== "free",
+        premium_templates: effectiveTier !== "free",
+        workflow_runner: effectiveTier === "plus",
+        team_features: effectiveTier === "plus",
       },
     };
 

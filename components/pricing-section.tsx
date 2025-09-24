@@ -4,6 +4,7 @@ import { motion } from "framer-motion"
 import { Check, Sparkles } from "lucide-react"
 import { useState } from "react"
 import { startSnapCheckout } from "@/lib/midtrans"
+import { getUSDPrice, USD_TO_IDR } from "@/data/pricing"
 import { getSupabaseBrowser } from "@/lib/supabase-browser"
 
 const pricingPlans = [
@@ -21,21 +22,18 @@ const pricingPlans = [
     annualPrice: 29,
     description: "For professionals building serious projects",
     features: [
-      "Unlimited components",
-      "Premium templates",
-      "Priority support",
-      "Advanced animations",
-      "Custom themes",
-      "Export to GitHub",
+      "Agent mode Unlimited Access",
+      "Build in MCP tools",
+      "Custom MCP",
+      "24/7 VIP Support",
+      "Lifetime Access Ternary Learning Academy",
     ],
     popular: true,
     cta: "Start Free Trial",
   },
   {
-    name: "Team",
-    monthlyPrice: 9,
-    annualPrice: 79,
-    description: "For teams collaborating on projects",
+    name: "Custom",
+    description: "For teams and enterprises with custom needs",
     features: [
       "Everything in Pro",
       "Team collaboration",
@@ -142,12 +140,15 @@ export function PricingSection() {
                   {plan.price ? (
                     <span className="text-4xl font-bold text-white">{plan.price}</span>
                   ) : (
-                    <>
-                      <span className="text-4xl font-bold text-white">
-                        ${isAnnual ? plan.annualPrice : plan.monthlyPrice}
-                      </span>
-                      <span className="text-white/60 text-lg">{isAnnual ? "/year" : "/month"}</span>
-                    </>
+                    (() => {
+                      const usd = getUSDPrice(plan.name, isAnnual ? "annual" : "monthly")
+                      return (
+                        <>
+                          <span className="text-4xl font-bold text-white">${usd}</span>
+                          <span className="text-white/60 text-lg">{isAnnual ? "/year" : "/month"}</span>
+                        </>
+                      )
+                    })()
                   )}
                 </div>
                 <p className="text-white/60 text-sm">{plan.description}</p>
@@ -174,9 +175,9 @@ export function PricingSection() {
                   try {
                     // Only initiate payment for paid plans
                     if (plan.price === "Free") return
-                    const usdAmount = isAnnual ? (plan as any).annualPrice : (plan as any).monthlyPrice
+                    const usdAmount = getUSDPrice(plan.name, isAnnual ? "annual" : "monthly")
                     if (!usdAmount) return
-                    const idrAmount = Math.round(usdAmount * 16000)
+                    const idrAmount = Math.round(usdAmount * USD_TO_IDR)
 
                     // Require auth: if not logged in, send to /login
                     const supabase = getSupabaseBrowser()
@@ -200,7 +201,7 @@ export function PricingSection() {
                         plan: plan.name,
                         billing_cycle: isAnnual ? "annual" : "monthly",
                         usd_price: usdAmount,
-                        rate: 16000,
+                        rate: USD_TO_IDR,
                         currency: "IDR",
                         user_id: userId,
                       },
